@@ -8,7 +8,7 @@ class Shaders{
     }
 
     async initialize(){
-        this.threejs_ = new THREE.WebGLRenderer();
+        this.threejs_ = new THREE.WebGLRenderer({antialias: true});
         document.body.appendChild(this.threejs_.domElement);
 
         window.addEventListener("resize", ()=>{
@@ -46,6 +46,7 @@ class Shaders{
 
         this.material = new THREE.ShaderMaterial({
             uniforms:{
+                specMap: {value: this.scene_.background},
                 iTime: { value: 0.0 },
                 iResolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) }   
             },
@@ -54,10 +55,11 @@ class Shaders{
         });
 
         const loader = new GLTFLoader();
-        loader.load("./assets/suzanne.glb", (gltf)=>{
+        loader.load("./assets/suzanne_animation_test.glb", (gltf)=>{
             gltf.scene.traverse((child)=>{
                 child.material = this.material;
             });
+            gltf.scene.rotation.x = -Math.PI/2
             this.scene_.add(gltf.scene)
         })
 
@@ -69,7 +71,10 @@ class Shaders{
     }
 
     onWindowResize_(){
+        this.camera_.aspect = window.innerWidth/window.innerHeight;
+        this.camera_.updateProjectionMatrix();
         this.threejs_.setSize(window.innerWidth, window.innerHeight);
+        this.threejs_.setPixelRatio(devicePixelRatio)
     }
 
     raf_(){
