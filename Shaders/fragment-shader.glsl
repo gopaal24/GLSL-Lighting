@@ -1,5 +1,7 @@
 varying vec2 vUvs;
 varying vec3 vNormals;
+varying vec3 vPosition;
+uniform samplerCube specMap;
 
 float inverseLerp(float value, float minValue, float maxValue){
     return (value -  minValue)/(maxValue - minValue);
@@ -11,9 +13,11 @@ float remap(float value, float  minA, float  maxA, float  minB, float  maxB){
 }
 
 void main(void){
-    vec3 baseColor = vec3(.5);
+    vec3 baseColor = vec3(.3, .1, .0);
     vec3 lighting = vec3(.0);
     vec3 normals = normalize(vNormals);
+    vec3 viewDir = normalize(cameraPosition - vPosition);
+  
     vec3 color = vec3(.0);
 
     // Ambient
@@ -33,13 +37,32 @@ void main(void){
 
     vec3 diffuse = dp * lightColor;
 
-    lighting = ambient * .2 + hemi*0.5 + diffuse*.5;
+    // Phong Specular
+    vec3 r = normalize(reflect(-lightDir, normals));
+    float phongValue = max(0., dot(viewDir, r));
+    phongValue = pow(phongValue, 32.);
+
+    vec3 specular = vec3(phongValue);
+
+    // IBL Specular
+    vec3 iblCoord = normalize(reflect(-viewDir, normals));
+    vec3 iblSample = textureCube(specMap, iblCoord).xyz;
+
+    specular += iblSample*0.5;
+
+    // Fresnel Effect
+    float fresnel = 1. - max(0., dot(viewDir, normals));
+    fresnel = pow(fresnel, 2.);
+
+    specular *= fresnel;
+
+    lighting = ambient * 0.5 + hemi*0.5 + diffuse*.5;
 
     //liner to gamma color correction
     color = pow(color, vec3(1./2.2));   
     
-    color = baseColor * lighting;
-    // color = normals;
+    color = baseColor * lighting + specular;
+
 
     gl_FragColor = vec4(color, 1.);
 }
