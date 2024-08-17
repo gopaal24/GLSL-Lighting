@@ -1,0 +1,155 @@
+.lil-gui {
+  --background-color: #f4e9d6; /* Warm beige */
+  --text-color: #5d4037; /* Rich brown */
+  --title-background-color: #8d6e63; /* Soft brown */
+  --title-text-color: #faf0e6; /* Light ivory */
+  --widget-color: #d7ccc8; /* Light taupe */
+  --hover-color: #bcaaa4; /* Muted rose */
+  --focus-color: #a1887f; /* Dusty rose */
+  --number-color: #6d4c41; /* Deep brown */
+  --string-color: #795548; /* Chocolate brown */
+
+  font-family: 'Georgia', serif;
+  font-size: 12px;
+  text-shadow: none;
+  width: 92%;
+  max-height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(93, 64, 55, 0.3);
+  background-color: var(--background-color);
+  color: var(--text-color);
+  border: 1px solid var(--title-background-color);
+  margin: 10px;
+}
+
+.lil-gui.root {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  background: transparent;
+}
+
+.lil-gui > .title {
+  background: var(--title-background-color);
+  color: var(--title-text-color);
+  font-weight: bold;
+  border-radius: 7px 7px 0 0;
+  padding-left: 8px;
+  font-size: 14px;
+}
+
+.lil-gui .folder {
+  background: var(--background-color);
+  border-radius: 5px;
+  margin-bottom: 15px;
+  overflow: hidden;
+  border: 1px solid var(--title-background-color);
+}
+
+.lil-gui .folder > .title {
+  background: var(--title-background-color);
+  color: var(--title-text-color);
+  border-radius: 4px 4px 0 0;
+  padding: 6px 8px;
+}
+
+.lil-gui .controller {
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--widget-color);
+  background-color: var(--background-color);
+}
+
+.lil-gui .controller:last-child {
+  border-bottom: none;
+}
+
+/* .lil-gui .controller:hover {
+  background-color: var(--hover-color);
+} */
+
+.lil-gui .controller.color .display {
+  position: relative;
+  width: calc(100%);
+  height: 20px;
+  border-radius: 3px;
+  margin-right: 20px;
+}
+
+.lil-gui .controller.color input[type="color"] {
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+
+.lil-gui .controller.color input[type="text"] {
+  position: absolute;
+  top: 1px;
+  right: -20px;
+  width: 20px;
+  text-align: center;
+  font-size: 9px;
+  background: transparent;
+  border: none;
+  color: var(--text-color);
+}
+
+.lil-gui input, .lil-gui select {
+  background: var(--widget-color);
+  color: var(--text-color);
+  border: 1px solid var(--title-background-color);
+  border-radius: 3px;
+  padding: 3px 6px;
+}
+
+.lil-gui input:hover, .lil-gui select:hover {
+  background: var(--hover-color);
+}
+
+/* .lil-gui input:focus, .lil-gui select:focus {
+  background: var(--focus-color);
+  outline: none;
+} */
+
+.lil-gui .slider {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 5px;
+  border-radius: 5px;
+  background: var(--widget-color);
+  outline: none;
+}
+
+.lil-gui .slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: var(--number-color);
+  cursor: pointer;
+}
+
+.lil-gui .slider::-moz-range-thumb {
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: var(--number-color);
+  cursor: pointer;
+}
+
+.lil-gui button {
+  background: var(--widget-color);
+  color: var(--text-color);
+  border: 1px solid var(--title-background-color);
+  border-radius: 3px;
+  padding: 5px 10px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.lil-gui button:hover {
+  background: var(--hover-color);
+}

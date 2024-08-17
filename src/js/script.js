@@ -2,6 +2,8 @@ import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js"
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js"
 
+import { ShaderControls } from "./controls.js";
+
 class Shaders{
     constructor(){
 
@@ -23,12 +25,12 @@ class Shaders{
         
         const loader = new THREE.CubeTextureLoader();
         const texture = loader.load([
-            "./assets/left.png",
-            "./assets/right.png", 
-            "./assets/top.png",
-            "./assets/bottom.png",
-            "./assets/front.png",
-            "./assets/back.png"
+            "src/assets/cube/left.png",
+            "src/assets/cube/right.png", 
+            "src/assets/cube/top.png",
+            "src/assets/cube/bottom.png",
+            "src/assets/cube/front.png",
+            "src/assets/cube/back.png"
         ]);
 
         this.scene_.background = texture;
@@ -41,21 +43,29 @@ class Shaders{
     }
 
     async setupProject_(){
-        const vsh = await fetch('./Shaders/vertex-shader.glsl');
-        const fsh = await fetch('./Shaders/fragment-shader.glsl');
+        const vsh = await fetch('src/Shaders/vertex-shader.glsl');
+        const fsh = await fetch('src/Shaders/fragment-shader.glsl');
 
         this.material = new THREE.ShaderMaterial({
             uniforms:{
-                specMap: {value: this.scene_.background},
-                iTime: { value: 0.0 },
-                iResolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) }   
+                modelColor: {value: new THREE.Color('#7F7F7F')}, 
+                ambientColor: {value: new THREE.Color('#7F7F7F')}, 
+                hemiSkyColor: {value: new THREE.Color('#004c99')}, 
+                hemiGroundColor: {value: new THREE.Color('#994c19')}, 
+                directionColor: {value: new THREE.Color('#ffffe5')},
+                ambientIntensity: {value: 0.5}, 
+                hemiIntensity: {value: 0.5}, 
+                directionIntensity: {value: 0.5}, 
+                specMap: {value: this.scene_.background}  
             },
             vertexShader: await vsh.text(),
             fragmentShader: await fsh.text()
         });
 
+        this.controls = new ShaderControls(this.material);
+
         const loader = new GLTFLoader();
-        loader.load("./assets/suzanne_animation_test.glb", (gltf)=>{
+        loader.load("src/assets/suzanne_animation_test.glb", (gltf)=>{
             gltf.scene.traverse((child)=>{
                 child.material = this.material;
             });
@@ -63,11 +73,6 @@ class Shaders{
             this.scene_.add(gltf.scene)
         })
 
-        const geometry = new THREE.PlaneGeometry(1,1);
-        const plane = new THREE.Mesh(geometry, this.material);
-        // this.scene_.add(plane);
-        this.clock = new THREE.Clock();
-        this.time = 0.2
     }
 
     onWindowResize_(){
@@ -82,8 +87,6 @@ class Shaders{
             if(this.previousRAF_ === null){
                 this.previousRAF_ -= t;
             }
-            this.time = this.clock.getElapsedTime();
-            this.material.uniforms.iTime.value = this.time*3;
             this.step_(t - this.previousRAF_);
             this.threejs_.render(this.scene_, this.camera_);
             this.raf_();
