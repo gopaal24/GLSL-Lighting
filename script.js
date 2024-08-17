@@ -41,8 +41,8 @@ class Shaders{
     }
 
     async setupProject_(){
-        const vsh = await fetch('./shaders/vertex-shader.glsl');
-        const fsh = await fetch('./shaders/fragment-shader.glsl');
+        const vsh = await fetch('./Shaders/vertex-shader.glsl');
+        const fsh = await fetch('./Shaders/fragment-shader.glsl');
 
         this.material = new THREE.ShaderMaterial({
             uniforms:{
