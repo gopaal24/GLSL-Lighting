@@ -1,13 +1,13 @@
 .lil-gui {
-  --background-color: #899EAD; /* Warm beige */
-  --text-color: #1f2326; /* Rich brown */
-  --title-background-color: #59606F; /* Soft brown */
-  --title-text-color: #faf0e6; /* Light ivory */
-  --widget-color: #9CB1BE ; /* Light taupe */
-  --hover-color: #91A0B0; /* Muted   rose */
-  --focus-color: #91A0B0; /* Dusty rose */
-  --number-color: #6d4c41; /* Deep brown */
-  --string-color: #795548; /* Chocolate brown */
+  --background-color: #899EAD; 
+  --text-color: #1f2326; 
+  --title-background-color: #59606F; 
+  --title-text-color: #faf0e6; 
+  --widget-color: #9CB1BE; 
+  --hover-color: #91A0B0; 
+  --focus-color: #91A0B0; 
+  --number-color: #6d4c41; 
+  --string-color: #795548; 
 
   font-family: 'Georgia', serif;
   font-size: 12px;
@@ -64,10 +64,6 @@
 .lil-gui .controller:last-child {
   border-bottom: none;
 }
-
-/* .lil-gui .controller:hover {
-  background-color: var(--hover-color);
-} */
 
 .lil-gui .controller.color .display {
   position: relative;

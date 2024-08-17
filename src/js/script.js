@@ -58,6 +58,8 @@ class Shaders{
                 hemiIntensity: {value: 0.5}, 
                 directionIntensity: {value: 0.5},
                 directionPosition : {value: new THREE.Vector3(1, 1, 1)},
+                roughness: {value: 0.5},
+                metalness: {value: 0.5},
                 specMap: {value: this.scene_.background}  
             },
             vertexShader: await vsh.text(),

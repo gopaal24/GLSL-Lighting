@@ -15,7 +15,8 @@ uniform float directionIntensity;
 
 uniform vec3 directionPosition;
 
-// uniform float 
+uniform float metalness;
+uniform float roughness;
 
 float inverseLerp(float value, float minValue, float maxValue){
     return (value -  minValue)/(maxValue - minValue);
@@ -54,7 +55,7 @@ void main(void){
     // Phong Specular
     vec3 r = normalize(reflect(-lightDir, normals));
     float phongValue = max(0., dot(viewDir, r));
-    phongValue = pow(phongValue, 2000.);
+    phongValue = pow(phongValue, 32. * (1.0 - roughness));
 
     vec3 specular = vec3(phongValue);
 
@@ -62,7 +63,7 @@ void main(void){
     vec3 iblCoord = normalize(reflect(-viewDir, normals));
     vec3 iblSample = textureCube(specMap, iblCoord).xyz;
 
-    specular += iblSample;
+    specular += iblSample * 0.5 * (1.0 - roughness);
 
     // Fresnel Effect
     float fresnel = 1. - max(0., dot(viewDir, normals));
@@ -70,13 +71,14 @@ void main(void){
 
     specular *= fresnel;
 
-    lighting = ambient * ambientIntensity + hemi*hemiIntensity + diffuse*directionIntensity;
+    // Metalness
+    vec3 metallicReflectance = mix(vec3(0.04), baseColor, metalness);
+    specular *= mix(metallicReflectance, vec3(1.0), metalness);
 
-    //liner to gamma color correction
-    
-    color = baseColor * lighting + specular;
-    color = pow(color, vec3(1./2.2));   
+    lighting = ambient * ambientIntensity + hemi * hemiIntensity + diffuse * directionIntensity;
 
+    color = baseColor * lighting + specular*metalness;
+    color = pow(color, vec3(1./2.2)); // Linear to gamma correction
 
     gl_FragColor = vec4(color, 1.);
 }
