@@ -43,6 +43,7 @@ class Shaders{
     }
 
     async setupProject_(){
+        
         const vsh = await fetch('src/Shaders/vertex-shader.glsl');
         const fsh = await fetch('src/Shaders/fragment-shader.glsl');
 
@@ -55,7 +56,8 @@ class Shaders{
                 directionColor: {value: new THREE.Color('#ffffe5')},
                 ambientIntensity: {value: 0.5}, 
                 hemiIntensity: {value: 0.5}, 
-                directionIntensity: {value: 0.5}, 
+                directionIntensity: {value: 0.5},
+                directionPosition : {value: new THREE.Vector3(1, 1, 1)},
                 specMap: {value: this.scene_.background}  
             },
             vertexShader: await vsh.text(),

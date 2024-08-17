@@ -13,6 +13,8 @@ uniform float ambientIntensity;
 uniform float hemiIntensity;
 uniform float directionIntensity;
 
+uniform vec3 directionPosition;
+
 // uniform float 
 
 float inverseLerp(float value, float minValue, float maxValue){
@@ -43,7 +45,7 @@ void main(void){
     vec3 hemi = mix(groundColor, skyColor, hemiMix);
 
     // Direction Light 
-    vec3 lightDir = vec3(1.);
+    vec3 lightDir = directionPosition;
     vec3 lightColor = directionColor;
     float dp = max(0., dot(lightDir, normals));
 
@@ -68,12 +70,12 @@ void main(void){
 
     specular *= fresnel;
 
-    lighting = ambient * 0.5 + hemi*.8 + diffuse*.5;
+    lighting = ambient * ambientIntensity + hemi*hemiIntensity + diffuse*directionIntensity;
 
     //liner to gamma color correction
-    color = pow(color, vec3(1./2.2));   
     
     color = baseColor * lighting + specular;
+    color = pow(color, vec3(1./2.2));   
 
 
     gl_FragColor = vec4(color, 1.);

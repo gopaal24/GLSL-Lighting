@@ -26,9 +26,9 @@ export class ShaderControls {
       directional: {
         Intensity: 0.5,
         Position: {
-          x: 0.2,
-          y: 0.3,
-          z: 0.2,
+          x: 1,
+          y: 1,
+          z: 1,
         },
         color: new THREE.Color("#ffffe5"),
       },
@@ -45,14 +45,18 @@ export class ShaderControls {
     const ambient = this.gui.addFolder("Ambient Light");
     ambient
       .add(this.params.ambient, "intensity", 0.0, 1.0, 0.1)
-      .name("Intensity");
+      .name("Intensity").onChange((value) => {
+        this.material.uniforms.ambientIntensity.value = value;
+      });
     ambient.addColor(this.params.ambient, "color").onChange((value) => {
         this.material.uniforms.ambientColor.value.set(value);
       });
     ambient.close();
 
     const hemi = this.gui.addFolder("Hemi Light");
-    hemi.add(this.params.hemi, "Intensity", 0.0, 1.0, 0.1);
+    hemi.add(this.params.hemi, "Intensity", 0.0, 1.0, 0.1).onChange((value) => {
+      this.material.uniforms.hemiIntensity.value = value;
+    });
     hemi.addColor(this.params.hemi, "Sky Color").onChange((value) => {
         this.material.uniforms.hemiSkyColor.value.set(value);
       });
@@ -62,13 +66,22 @@ export class ShaderControls {
     hemi.close();
 
     const directional = this.gui.addFolder("Directional Light");
-    directional.add(this.params.directional, "Intensity", 0.0, 1.0, 0.1);
+    directional.add(this.params.directional, "Intensity", 0.0, 1.0, 0.1).onChange((value) => {
+      this.material.uniforms.directionIntensity.value = value;
+    });
     directional.close();
 
     const position = directional.addFolder("Position");
-    position.add(this.params.directional.Position, "x", -10, 10, 0.1);
-    position.add(this.params.directional.Position, "y", -10, 10, 0.1);
-    position.add(this.params.directional.Position, "z", -10, 10, 0.1);
+    position.add(this.params.directional.Position, "x", -10, 10, 0.1).onChange((value) => {
+      console.log(this.material.uniforms.directionPosition.value.x)
+      this.material.uniforms.directionPosition.value.x = value;
+    });
+    position.add(this.params.directional.Position, "y", -10, 10, 0.1).onChange((value) => {
+      this.material.uniforms.directionPosition.value.y = value;
+    });
+    position.add(this.params.directional.Position, "z", -10, 10, 0.1).onChange((value) => {
+      this.material.uniforms.directionPosition.value.z = value;
+    });
     position.close();
 
     directional.addColor(this.params.directional, "color").onChange((value) => {
