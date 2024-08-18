@@ -42,13 +42,17 @@ export class ShaderControls {
     model.addColor(this.params.model, "color").onChange((value) => {
       this.material.uniforms.modelColor.value.set(value);
     });
-    model.add(this.params.model, "roughness", 0.0, 1.0, 0.1).onChange((value) => {
-      console.log(value)
-      this.material.uniforms.roughness.value = value;
-    });
-    model.add(this.params.model, "metalness", 0.0, 1.0, 0.1).onChange((value) => {
-      this.material.uniforms.metalness.value = value;
-    });
+    model
+      .add(this.params.model, "roughness", 0.0, 1.0, 0.1)
+      .onChange((value) => {
+        console.log(value);
+        this.material.uniforms.roughness.value = value;
+      });
+    model
+      .add(this.params.model, "metalness", 0.0, 1.0, 0.1)
+      .onChange((value) => {
+        this.material.uniforms.metalness.value = value;
+      });
     model.close();
 
     const ambient = this.gui.addFolder("Ambient Light");
@@ -83,7 +87,7 @@ export class ShaderControls {
       });
     directional.close();
 
-    const position = directional.addFolder("Position");
+    const position = directional.addFolder("Direction");
     position
       .add(this.params.directional.Position, "x", -10, 10, 0.1)
       .onChange((value) => {

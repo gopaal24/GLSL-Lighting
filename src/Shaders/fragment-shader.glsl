@@ -69,7 +69,7 @@ void main(void){
     float fresnel = 1. - max(0., dot(viewDir, normals));
     fresnel = pow(fresnel, 2.);
 
-    specular *= fresnel;
+    // specular *= fresnel;
 
     // Metalness
     vec3 metallicReflectance = mix(vec3(0.04), baseColor, metalness);
