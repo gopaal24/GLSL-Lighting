@@ -17,11 +17,15 @@ class Shaders{
             this.onWindowResize_();
         }, false);
 
+        window.addEventListener("keydown", (e)=>{
+            this.handleArrowKeys(e);
+        })
+
         this.scene_ = new THREE.Scene();
         this.camera_ = new THREE.PerspectiveCamera(45, window.innerWidth/window.innerHeight, 0.1, 1000);
         this.camera_.position.set(0,0, 5);
 
-        const controls = new OrbitControls(this.camera_, this.threejs_.domElement)
+        this.orbitalControls = new OrbitControls(this.camera_, this.threejs_.domElement)
         
         const loader = new THREE.CubeTextureLoader();
         const texture = loader.load([
@@ -43,6 +47,8 @@ class Shaders{
     }
 
     async setupProject_(){
+        this.t = 0;
+        this.radius = 0;
         
         const vsh = await fetch('src/Shaders/vertex-shader.glsl');
         const fsh = await fetch('src/Shaders/fragment-shader.glsl');
@@ -73,6 +79,7 @@ class Shaders{
             gltf.scene.traverse((child)=>{
                 child.material = this.material;
             });
+            this.model = gltf.scene;
             gltf.scene.rotation.x = -Math.PI/2
             this.scene_.add(gltf.scene)
         })
@@ -84,6 +91,31 @@ class Shaders{
         this.camera_.updateProjectionMatrix();
         this.threejs_.setSize(window.innerWidth, window.innerHeight);
         this.threejs_.setPixelRatio(devicePixelRatio)
+    }
+
+    handleArrowKeys(key){
+        const offsetX = this.camera_.position.x - this.model.position.x;
+        const offsetZ = this.camera_.position.z - this.model.position.z;
+        this.radius = Math.sqrt(offsetX * offsetX + offsetZ * offsetZ);
+    
+        this.t = Math.atan2(offsetZ, offsetX);
+    
+        const rotationSpeed = 0.05;
+    
+        if (key.key === "ArrowRight") {
+            this.t += rotationSpeed;
+        } else if (key.key === "ArrowLeft") {
+            this.t -= rotationSpeed;
+        }
+    
+        this.camera_.position.x = this.model.position.x + this.radius * Math.cos(this.t);
+        this.camera_.position.z = this.model.position.z + this.radius * Math.sin(this.t);
+        this.camera_.position.y = this.model.position.y;
+    
+        this.camera_.lookAt(this.model.position);
+    
+        this.orbitalControls.target.copy(this.model.position);
+        this.orbitalControls.update();
     }
 
     raf_(){
