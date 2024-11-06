@@ -24,6 +24,7 @@ class Shaders{
         this.scene_ = new THREE.Scene();
         this.camera_ = new THREE.PerspectiveCamera(45, window.innerWidth/window.innerHeight, 0.1, 1000);
         this.camera_.position.set(0,0, 5);
+        this.autoRotate = false;
 
         this.orbitalControls = new OrbitControls(this.camera_, this.threejs_.domElement)
         
@@ -93,21 +94,28 @@ class Shaders{
         this.threejs_.setPixelRatio(devicePixelRatio)
     }
 
-    handleArrowKeys(key){
+    handleArrowKeys(key){    
+        if (key.key === "ArrowRight") {
+            this.t += rotationSpeed;
+        } else if (key.key === "ArrowLeft") {
+            this.t -= rotationSpeed;
+        }
+
+        if(key.key == "r") {
+            this.autoRotate = !this.autoRotate;
+        }       
+        
+    }
+
+    rotate(){
         const offsetX = this.camera_.position.x - this.model.position.x;
         const offsetZ = this.camera_.position.z - this.model.position.z;
         this.radius = Math.sqrt(offsetX * offsetX + offsetZ * offsetZ);
     
         this.t = Math.atan2(offsetZ, offsetX);
     
-        const rotationSpeed = 0.05;
-    
-        if (key.key === "ArrowRight") {
-            this.t += rotationSpeed;
-        } else if (key.key === "ArrowLeft") {
-            this.t -= rotationSpeed;
-        }
-    
+        const rotationSpeed = 0.01;
+        this.t += rotationSpeed;
         this.camera_.position.x = this.model.position.x + this.radius * Math.cos(this.t);
         this.camera_.position.z = this.model.position.z + this.radius * Math.sin(this.t);
         this.camera_.position.y = this.model.position.y;
@@ -124,6 +132,7 @@ class Shaders{
                 this.previousRAF_ -= t;
             }
             this.step_(t - this.previousRAF_);
+            if(this.autoRotate) this.rotate();
             this.threejs_.render(this.scene_, this.camera_);
             this.raf_();
             this.previousRAF_ = t;
