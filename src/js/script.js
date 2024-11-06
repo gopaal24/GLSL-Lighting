@@ -107,7 +107,13 @@ class Shaders{
         } else if (key.key === "ArrowLeft") {
             this.t -= rotationSpeed;
         }
-    
+
+        if(key.key == "r") {
+            this.autoRotate?false:true;
+        }
+        if(this.autoRotate) {
+            this.t += rotationSpeed
+        }
         this.camera_.position.x = this.model.position.x + this.radius * Math.cos(this.t);
         this.camera_.position.z = this.model.position.z + this.radius * Math.sin(this.t);
         this.camera_.position.y = this.model.position.y;
