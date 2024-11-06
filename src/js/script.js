@@ -113,9 +113,9 @@ class Shaders{
         this.radius = Math.sqrt(offsetX * offsetX + offsetZ * offsetZ);
     
         this.t = Math.atan2(offsetZ, offsetX);
-    
         const rotationSpeed = 0.01;
         this.t += rotationSpeed;
+        
         this.camera_.position.x = this.model.position.x + this.radius * Math.cos(this.t);
         this.camera_.position.z = this.model.position.z + this.radius * Math.sin(this.t);
         this.camera_.position.y = this.model.position.y;
