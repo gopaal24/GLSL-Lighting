@@ -114,7 +114,11 @@ class Shaders{
     
         this.t = Math.atan2(offsetZ, offsetX);
     
+<<<<<<< HEAD
         const rotationSpeed = 0.01;
+=======
+        const rotationSpeed = 0.05;
+>>>>>>> 4312bca04742b5630a5869e10862eeab43ee8510
         this.t += rotationSpeed;
         this.camera_.position.x = this.model.position.x + this.radius * Math.cos(this.t);
         this.camera_.position.z = this.model.position.z + this.radius * Math.sin(this.t);
@@ -132,7 +136,11 @@ class Shaders{
                 this.previousRAF_ -= t;
             }
             this.step_(t - this.previousRAF_);
+<<<<<<< HEAD
             if(this.autoRotate) this.rotate();
+=======
+            if(autoRotate) rotate();
+>>>>>>> 4312bca04742b5630a5869e10862eeab43ee8510
             this.threejs_.render(this.scene_, this.camera_);
             this.raf_();
             this.previousRAF_ = t;
