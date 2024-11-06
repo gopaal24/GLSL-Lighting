@@ -24,6 +24,7 @@ class Shaders{
         this.scene_ = new THREE.Scene();
         this.camera_ = new THREE.PerspectiveCamera(45, window.innerWidth/window.innerHeight, 0.1, 1000);
         this.camera_.position.set(0,0, 5);
+        this.autoRotate = false;
 
         this.orbitalControls = new OrbitControls(this.camera_, this.threejs_.domElement)
         
@@ -109,11 +110,12 @@ class Shaders{
         }
 
         if(key.key == "r") {
-            this.autoRotate?false:true;
+            this.autoRotate = !this.autoRotate;
         }
         if(this.autoRotate) {
             this.t += rotationSpeed
         }
+        
         this.camera_.position.x = this.model.position.x + this.radius * Math.cos(this.t);
         this.camera_.position.z = this.model.position.z + this.radius * Math.sin(this.t);
         this.camera_.position.y = this.model.position.y;
