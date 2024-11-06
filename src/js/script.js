@@ -94,15 +94,7 @@ class Shaders{
         this.threejs_.setPixelRatio(devicePixelRatio)
     }
 
-    handleArrowKeys(key){
-        const offsetX = this.camera_.position.x - this.model.position.x;
-        const offsetZ = this.camera_.position.z - this.model.position.z;
-        this.radius = Math.sqrt(offsetX * offsetX + offsetZ * offsetZ);
-    
-        this.t = Math.atan2(offsetZ, offsetX);
-    
-        const rotationSpeed = 0.05;
-    
+    handleArrowKeys(key){    
         if (key.key === "ArrowRight") {
             this.t += rotationSpeed;
         } else if (key.key === "ArrowLeft") {
@@ -111,11 +103,19 @@ class Shaders{
 
         if(key.key == "r") {
             this.autoRotate = !this.autoRotate;
-        }
-        if(this.autoRotate) {
-            this.t += rotationSpeed
-        }
+        }       
         
+    }
+
+    rotate(){
+        const offsetX = this.camera_.position.x - this.model.position.x;
+        const offsetZ = this.camera_.position.z - this.model.position.z;
+        this.radius = Math.sqrt(offsetX * offsetX + offsetZ * offsetZ);
+    
+        this.t = Math.atan2(offsetZ, offsetX);
+    
+        const rotationSpeed = 0.05;
+        this.t += rotationSpeed;
         this.camera_.position.x = this.model.position.x + this.radius * Math.cos(this.t);
         this.camera_.position.z = this.model.position.z + this.radius * Math.sin(this.t);
         this.camera_.position.y = this.model.position.y;
@@ -132,6 +132,7 @@ class Shaders{
                 this.previousRAF_ -= t;
             }
             this.step_(t - this.previousRAF_);
+            if(autoRotate) rotate();
             this.threejs_.render(this.scene_, this.camera_);
             this.raf_();
             this.previousRAF_ = t;
