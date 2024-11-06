@@ -138,7 +138,6 @@ class Shaders{
             this.previousRAF_ = t;
         });
     }
-
     step_(timeElapsed){
     }
 }
